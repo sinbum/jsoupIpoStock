@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+<meta charset="UTF-8">
+<link th:href="@{/css/index.css}" rel="stylesheet" type="text/css">
+<script type="text/javascript" th:src="@{/js/index.js}"></script>
+
+
+<title>ipoStockCalender</title>
+</head>
+<body>
+	<h1>IPO 달력 관리 서비스</h1>
+	<button>전체 등록 버튼</button>
+	
+	<!-- 구글 로그인 부분 -->
+	<div>
+		<button id="authorize_button" style="display: none;">Authorize</button>
+		<button id="signout_button" style="display: none;">Sign Out</button>
+	</div>
+	
+	<table>
+		<thead>
+			<tr>
+				<th>회사명</th>
+				<th>공모일</th>
+				<th>희망공모가</th>
+				<th>공모가</th>
+				<th>공모금액</th>
+				<th>상장일</th>
+				<th>환불일</th>
+				<th>경쟁률</th>
+				<th>주간사</th>
+				<th>등록,삭제</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="ipo : ${ipoList}">
+				<td th:text="${ipo.name}"></td>
+				<td th:text="${ipo.date}"></td>
+				<td th:text="${ipo.watedPrice}"></td>
+				<td th:text="${ipo.price}"></td>
+				<td th:text="${ipo.wantedTotal}"></td>
+				<td th:text="${ipo.OpenDate}"></td>
+				<td th:text="${ipo.refundedDate}"></td>
+				<td th:text="${ipo.competitionRate}"></td>
+				<td th:text="${ipo.StockCoName}"></td>
+				<td><button>입력</button><button>삭제</button></td>				
+			</tr>
+		</tbody>
+	</table>
+	
+	<p>번외</p>
+	<pre id="content" style="white-space: pre-wrap;"></pre>
+	
+	<script type="text/javascript" th:src="@{/js/googleAPI.js}"></script>
+
+	<script async defer src="https://apis.google.com/js/api.js"
+      onload="this.onload=function(){};handleClientLoad()"
+      onreadystatechange="if (this.readyState === 'complete') this.onload()">
+    </script>
+
+</body>
+</html>

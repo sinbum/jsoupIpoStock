@@ -1,6 +1,9 @@
-package jsoup;
+package com.example.demo.service;
 
-public class IpoInfo {	
+import org.springframework.stereotype.Component;
+
+@Component
+public class IpoData {	
 	//추천 공모일정 종목명 희망공모가 공모가 공모금액 환불일 상장일 경쟁율 주간사
 	
 	String refference;
@@ -10,11 +13,11 @@ public class IpoInfo {
 	String price;
 	String wantedTotal;
 	String refundedDate;
-	String OpenDate;
+	String openDate;
 	String competitionRate;
 	String StockCoName;
 	
-	public IpoInfo() {
+	public IpoData() {
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -55,10 +58,10 @@ public class IpoInfo {
 		this.refundedDate = refundedDate;
 	}
 	public String getOpenDate() {
-		return OpenDate;
+		return openDate;
 	}
 	public void setOpenDate(String openDate) {
-		OpenDate = openDate;
+		this.openDate = openDate;
 	}
 	public String getCompetitionRate() {
 		return competitionRate;
@@ -81,7 +84,7 @@ public class IpoInfo {
 		this.price = price;
 	}
 
-	public IpoInfo(String refference, String date, String name, String watedPrice, String price, String wantedTotal,
+	public IpoData(String refference, String date, String name, String watedPrice, String price, String wantedTotal,
 			String refundedDate, String openDate, String competitionRate, String stockCoName) {
 		super();
 		this.refference = refference;
@@ -91,7 +94,7 @@ public class IpoInfo {
 		this.price = price;
 		this.wantedTotal = wantedTotal;
 		this.refundedDate = refundedDate;
-		OpenDate = openDate;
+		this.openDate = openDate;
 		this.competitionRate = competitionRate;
 		StockCoName = stockCoName;
 	}
@@ -99,8 +102,8 @@ public class IpoInfo {
 	@Override
 	public String toString() {
 		return "IpoInfo [refference=" + refference + ", date=" + date + ", name=" + name + ", watedPrice=" + watedPrice
-				+ ", price=" + price + ", wantedTotal=" + wantedTotal + ", refundedDate=" + refundedDate + ", OpenDate="
-				+ OpenDate + ", competitionRate=" + competitionRate + ", StockCoName=" + StockCoName + "]";
+				+ ", price=" + price + ", wantedTotal=" + wantedTotal + ", refundedDate=" + refundedDate + ", openDate="
+				+ openDate + ", competitionRate=" + competitionRate + ", StockCoName=" + StockCoName + "]";
 	}
 	
 	
