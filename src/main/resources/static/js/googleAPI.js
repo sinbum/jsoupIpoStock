@@ -36,7 +36,7 @@ function initClient() {
     updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
     authorizeButton.onclick = handleAuthClick;
     signoutButton.onclick = handleSignoutClick;
-  }, function(error) {
+  }, function (error) {
     appendPre(JSON.stringify(error, null, 2));
   });
 }
@@ -95,7 +95,7 @@ function listUpcomingEvents() {
     'singleEvents': true,
     'maxResults': 10,
     'orderBy': 'startTime'
-  }).then(function(response) {
+  }).then(function (response) {
     var events = response.result.items;
     appendPre('Upcoming events:');
 
@@ -113,4 +113,71 @@ function listUpcomingEvents() {
     }
   });
 }
+
+var calendarEvent =
+{
+  'summary': '공모주 등록테스트',  
+  'description': '이것이 된다 면 진짜 대박입니다. http://naver.com',
+  "end": {
+    "date": "2021-11-27",
+    "timeZone": "Asia/Seoul"
+  },
+  "start": {
+    "date": "2021-11-25",
+    "timeZone": "Asia/Seoul"
+  }
+}
+
+var insertRequestObject = {
+  "calendarId": "primary",
+  "resource": calendarEvent
+}
+
+
+
+// Make sure the client is loaded and sign-in is complete before calling this method.
+// function execute() {
+//   return gapi.client.calendar.events.insert({
+//     "calendarId": "primary",
+//     "resource": {
+//       "end": {
+//         "date": "2021-11-26",
+//         "timeZone": "Asia/Seoul"
+//       },
+//       "start": {
+//         "date": "2021-11-25",
+//         "timeZone": "Asia/Seoul"
+//       }
+//     }
+//   })
+//       .then(function(response) {
+//               // Handle the results here (response.result has the parsed body).
+//               console.log("Response", response);
+
+//               gapi.load("client:auth2", function() {
+//                 gapi.auth2.init({client_id: "YOUR_CLIENT_ID"});
+//               });
+
+//             },
+//             function(err) { console.error("Execute error", err); });
+// }
+
+var description = "이것이 한글로 된다면 변수 description이 가능한것입니다.";
+
+//제이슨데이터를 담은 이벤트 객체를 넣은 버전
+function execute() {
+  return gapi.client.calendar.events.insert(insertRequestObject)
+    .then(function (response) {
+      // Handle the results here (response.result has the parsed body).
+      console.log("Response", response);
+
+      gapi.load("client:auth2", function () {
+        gapi.auth2.init({ client_id: CLIENT_ID });
+      });
+
+    },
+      function (err) { console.error("Execute error", err); });
+}
+
+
 
