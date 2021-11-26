@@ -1,15 +1,46 @@
-// Client ID and API key from the Developer Console
+
+//변수,모듈선언부 ------------------------------------------------------------------------------------------
+
+
 var CLIENT_ID = '774051343533-o785lh5kimdbmecde7b1ktqdfqtd0mtc.apps.googleusercontent.com';
 var API_KEY = 'AIzaSyD2ZABO2fldEAf40_DPyNduUnG-Zm9Szwc';
-// Array of API discovery doc URLs for APIs used by the quickstart
 var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"];
-
-// Authorization scopes required by the API; multiple scopes can be
-// included, separated by spaces.
 var SCOPES = "https://www.googleapis.com/auth/calendar";
 
 var authorizeButton = document.getElementById('authorize_button');
 var signoutButton = document.getElementById('signout_button');
+
+
+
+//이벤트 객체 생성.
+var ceo = new Object();
+var endO = new Object();
+var startO = new Object;
+
+startO.date = "2021-11-30";
+startO.timeZone = "Asia/Seoul";
+endO.date = "2021-11-30";
+endO.timeZone = "Asia/Seoul";
+
+ceo.summary = "제목글";
+ceo.description = "설명";
+ceo.end = endO;
+ceo.start = startO;
+
+var eventJson = JSON.stringify(ceo);
+console.log(eventJson);
+//alert(eventJson);
+
+var insertRequestObject = {
+  "calendarId": "primary",
+  //"resource": calendarEvent  //eventJson
+  "resource": eventJson
+}
+
+
+// 함수 선언부 ------------------------------------------------------------------------------------------
+
+
 
 /**
  *  On load, called to load the auth2 library and API client library.
@@ -49,26 +80,12 @@ function updateSigninStatus(isSignedIn) {
   if (isSignedIn) {
     authorizeButton.style.display = 'none';
     signoutButton.style.display = 'block';
-    listUpcomingEvents();
   } else {
     authorizeButton.style.display = 'block';
     signoutButton.style.display = 'none';
   }
 }
 
-/**
- *  Sign in the user upon button click.
- */
-function handleAuthClick(event) {
-  gapi.auth2.getAuthInstance().signIn();
-}
-
-/**
- *  Sign out the user upon button click.
- */
-function handleSignoutClick(event) {
-  gapi.auth2.getAuthInstance().signOut();
-}
 
 /**
  * Append a pre element to the body containing the given message
@@ -91,14 +108,14 @@ function listUpcomingEvents() {
   gapi.client.calendar.events.list({
     'calendarId': 'primary',
     'timeMin': (new Date()).toISOString(),
+    'timeMax': (getNextMonth()),
     'showDeleted': false,
     'singleEvents': true,
-    'maxResults': 10,
+    'maxResults': 20,
     'orderBy': 'startTime'
   }).then(function (response) {
     var events = response.result.items;
     appendPre('Upcoming events:');
-
     if (events.length > 0) {
       for (i = 0; i < events.length; i++) {
         var event = events[i];
@@ -114,70 +131,47 @@ function listUpcomingEvents() {
   });
 }
 
-var calendarEvent =
-{
-  'summary': '공모주 등록테스트',  
-  'description': '이것이 된다 면 진짜 대박입니다. http://naver.com',
-  "end": {
-    "date": "2021-11-27",
-    "timeZone": "Asia/Seoul"
-  },
-  "start": {
-    "date": "2021-11-25",
-    "timeZone": "Asia/Seoul"
-  }
-}
-
-var insertRequestObject = {
-  "calendarId": "primary",
-  "resource": calendarEvent
+function getNextMonth() {
+  var endOfMonth = new Date();
+  endOfMonth.setMonth((new Date().getMonth()) + 1);
+  return endOfMonth.toISOString();
 }
 
 
 
-// Make sure the client is loaded and sign-in is complete before calling this method.
-// function execute() {
-//   return gapi.client.calendar.events.insert({
-//     "calendarId": "primary",
-//     "resource": {
-//       "end": {
-//         "date": "2021-11-26",
-//         "timeZone": "Asia/Seoul"
-//       },
-//       "start": {
-//         "date": "2021-11-25",
-//         "timeZone": "Asia/Seoul"
-//       }
-//     }
-//   })
-//       .then(function(response) {
-//               // Handle the results here (response.result has the parsed body).
-//               console.log("Response", response);
 
-//               gapi.load("client:auth2", function() {
-//                 gapi.auth2.init({client_id: "YOUR_CLIENT_ID"});
-//               });
+//이벤트 처리영역 ------------------------------------------------------------------------------------------
 
-//             },
-//             function(err) { console.error("Execute error", err); });
-// }
 
-var description = "이것이 한글로 된다면 변수 description이 가능한것입니다.";
+/**
+ *  Sign in the user upon button click.
+ */
+function handleAuthClick(event) {
+  gapi.auth2.getAuthInstance().signIn();
+}
 
-//제이슨데이터를 담은 이벤트 객체를 넣은 버전
-function execute() {
+/**
+ *  Sign out the user upon button click.
+ */
+function handleSignoutClick(event) {
+  gapi.auth2.getAuthInstance().signOut();
+}
+
+
+/*
+ * 
+ * @returns 일정 등록을 하고 성공시 성공알림을 반환
+ * 
+ */
+function EventInsertexecute() {
   return gapi.client.calendar.events.insert(insertRequestObject)
     .then(function (response) {
-      // Handle the results here (response.result has the parsed body).
-      console.log("Response", response);
-
-      gapi.load("client:auth2", function () {
-        gapi.auth2.init({ client_id: CLIENT_ID });
-      });
-
+      alert("정상적으로 등록되었습니다.");
     },
-      function (err) { console.error("Execute error", err); });
+      function (err) { console.error("Execute error", err); alert("이벤트 등록중 문제가 발생하였습니다. 관리자에게 문의하세요."); });
 }
+
+
 
 
 
