@@ -12,35 +12,83 @@ var signoutButton = document.getElementById('signout_button');
 
 
 
-//이벤트 객체 생성.
-var ceo = new Object();
-var endO = new Object();
-var startO = new Object;
+/**
+ * 데이터 삽입에 대한 요청 객체
+ */
 
-startO.date = "2021-11-30";
-startO.timeZone = "Asia/Seoul";
-endO.date = "2021-11-30";
-endO.timeZone = "Asia/Seoul";
-
-ceo.summary = "제목글";
-ceo.description = "설명";
-ceo.end = endO;
-ceo.start = startO;
-
-var eventJson = JSON.stringify(ceo);
-console.log(eventJson);
-//alert(eventJson);
-
-var insertRequestObject = {
-  "calendarId": "primary",
-  //"resource": calendarEvent  //eventJson
-  "resource": eventJson
+function insertRequestObjectCreate(colorId) {
+  var insertRequestObject =
+  {
+    "calendarId": "primary",
+    //"resource": calendarEvent  //eventJson
+    "resource": createJsonEvent(colorId)
+  }
+  return insertRequestObject;
 }
 
 
 // 함수 선언부 ------------------------------------------------------------------------------------------
 
+//슬립.
+function sleep(ms) {
+  const wakeUpTime = Date.now() + ms;
+  while (Date.now() < wakeUpTime) {}
+}
 
+/*
+ * 
+ * @returns 일정 등록을 하고 성공시 성공알림을 반환
+ * 
+ */
+function EventInsertexecute(colorId) {
+  return gapi.client.calendar.events.insert(insertRequestObjectCreate(colorId))
+    .then(function (response) {
+      appendPre(colorId+"등록 성공")
+    },
+      function (err) { console.error("Execute error", err);appendPre(colorId+"등록 실패 : 이벤트 등록중 문제가 발생하였습니다. 관리자에게 문의하세요.");});
+}
+
+
+
+/**
+ * 캘린더 이벤트객체 생성
+ */
+function createJsonEvent(colorId) {
+  var ceo = new Object();
+  var endO = new Object();
+  var startO = new Object;
+  //"dateTime": "2021-11-29T10:00:00+09:00",
+  //"timeZone": "Asia/Seoul"
+  startO.dateTime = "2021-11-29T18:00:00+09:00";
+  startO.timeZone = "Asia/Seoul";
+  endO.dateTime = "2021-11-29T20:00:00+09:00";
+  endO.timeZone = "Asia/Seoul";
+
+  ceo.summary = colorId;
+  ceo.description = "이제 핸드폰에 모든 ipo 정보가 다담긴다!!!";
+  ceo.end = endO;
+  ceo.start = startO;
+
+  //색상 테스트
+  ceo.colorId = colorId;
+
+  var eventJson = JSON.stringify(ceo);
+
+  return eventJson;
+}
+
+function testColorCheck() {
+  alert("ee");
+  var i;
+  var colorId = i;
+  for (i = 0; i < 13; i++) {
+    console.log(i);
+    EventInsertexecute(i).then(function (){
+      sleep(300);
+    });
+    
+  }
+}
 
 /**
  *  On load, called to load the auth2 library and API client library.
@@ -157,19 +205,6 @@ function handleSignoutClick(event) {
   gapi.auth2.getAuthInstance().signOut();
 }
 
-
-/*
- * 
- * @returns 일정 등록을 하고 성공시 성공알림을 반환
- * 
- */
-function EventInsertexecute() {
-  return gapi.client.calendar.events.insert(insertRequestObject)
-    .then(function (response) {
-      alert("정상적으로 등록되었습니다.");
-    },
-      function (err) { console.error("Execute error", err); alert("이벤트 등록중 문제가 발생하였습니다. 관리자에게 문의하세요."); });
-}
 
 
 

@@ -1,0 +1,68 @@
+{"items" : [
+
+{
+    "kind": "calendar#event",
+    "etag": "\"3275945960378000\"",
+    "id": "0lmtm6g52g77q9od6okmj2kjj0",
+    "status": "confirmed",
+    "htmlLink": "https://www.google.com/calendar/event?eid=MGxtdG02ZzUyZzc3cTlvZDZva21qMmtqajAgc2luYnVtMzQxOUBt",
+    "created": "2021-11-27T00:22:39.000Z",
+    "updated": "2021-11-27T00:36:40.926Z",
+    "summary": "테스트로 실행합니다",
+    "description": "createJsonEvent() 로 생성한 객체 이벤트 등록.",
+    "colorId": "5",
+    "creator": {
+     "email": "sinbum3419@gmail.com",
+     "self": true
+    },
+    "organizer": {
+     "email": "sinbum3419@gmail.com",
+     "self": true
+    },
+    "start": {
+     "date": "2021-11-29"
+    },
+    "end": {
+     "date": "2021-11-29"
+    },
+    "iCalUID": "0lmtm6g52g77q9od6okmj2kjj0@google.com",
+    "sequence": 0,
+    "reminders": {
+     "useDefault": false     
+    },
+    "eventType": "default"
+   },
+   {
+    "kind": "calendar#event",
+    "etag": "\"3275946629743000\"",
+    "id": "0ot09k475f2udnq1gl1diio4me",
+    "status": "confirmed",
+    "htmlLink": "https://www.google.com/calendar/event?eid=MG90MDlrNDc1ZjJ1ZG5xMWdsMWRpaW80bWUgc2luYnVtMzQxOUBt",
+    "created": "2021-11-27T00:34:36.000Z",
+    "updated": "2021-11-27T00:34:36.094Z",
+    "summary": "웹전용에서 추가",
+    "creator": {
+     "email": "sinbum3419@gmail.com",
+     "self": true
+    },
+    "organizer": {
+     "email": "sinbum3419@gmail.com",
+     "self": true
+    },
+    "start": {
+     "dateTime": "2021-11-29T10:00:00+09:00",
+     "timeZone": "Asia/Seoul"
+    },
+    "end": {
+     "dateTime": "2021-11-29T11:00:00+09:00",
+     "timeZone": "Asia/Seoul"
+    },
+    "iCalUID": "0ot09k475f2udnq1gl1diio4me@google.com",
+    "sequence": 0,
+    "reminders": {
+     "useDefault": false
+    },
+    "eventType": "default"
+   }
+]
+}
