@@ -75,24 +75,18 @@ function EventInsertexecute(colorId, startTime, endTime, summary, description) {
 /**
  * 공모일 이벤트 등록 함수
  */
-function redEventInsert() {
-  var colorId = 11;
-  var startTime = "2021-12-01T10:00:00+09:00";
-  var endTime = "2021-12-01T12:00:00+09:00";
-  var description = "설명";
-  var summary = "제목쓰기";
+function redEventInsert(ipoData) {
+  ipoData.colorId = 11;
+ 
   EventInsertexecute(colorId, startTime, endTime, description, summary);
 }
 
 /**
  * 환불일 이벤트 등록 함수
  */
-function yellowEventInser() {
-  var colorId = 5;
-  var startTime = "2021-12-01T10:00:00+09:00";
-  var endTime = "2021-12-01T12:00:00+09:00";
-  var description = "설명";
-  var summary = "제목쓰기";
+function yellowEventInser(ipoData) {
+  ipoData.colorId = 5;
+ 
   EventInsertexecute(colorId, startTime, endTime, description, summary);
 }
 
@@ -100,12 +94,9 @@ function yellowEventInser() {
 /**
  * 상장일 이벤트 등록 함수
  */
-function greenEventInser() {
-  var colorId = 10;
-  var startTime = "2021-12-01T10:00:00+09:00";
-  var endTime = "2021-12-01T12:00:00+09:00";
-  var description = "설명";
-  var summary = "제목쓰기";
+function greenEventInser(ipoData) {
+  ipoData.colorId = 10;
+
   EventInsertexecute(colorId, startTime, endTime, description, summary);
 }
 
@@ -113,6 +104,7 @@ function greenEventInser() {
  * 공모데이터를 한번에 등록함. parameter값 수정 필요.
  */
 function ipoEventInsertExe(event) {
+  
   redEventInsert();
   yellowEventInser();
   greenEventInser();
@@ -134,30 +126,38 @@ function ipoEventInsertExe(event) {
         <td th:text="${ipo.StockCoName}"></td>
 
  */
-function ipoDataTransfer(compnayName, ipoDate, refundedDate, openDate, wantedPrice, price, wantedTotal, competitionRate, stockCoName, deTailLink) {
-  //회사명,공모일,상장일,환불일,경쟁률,주간사,상세보기
-  var ipoData = new Object;
+function ipoDataTransfer(ipoDocData) {
 
-  var colorId = 5;
-  var startTime = "2021-12-01T10:00:00+09:00";
-  var endTime = "2021-12-01T12:00:00+09:00";
-  var description = "설명";
-  var summary = "제목쓰기";
+  // ipoDocDatas.company         =td[0].firstChild.data;
+  // ipoDocDatas.date            =td[1].firstChild.data;
+  // ipoDocDatas.wantedPrice     =td[2].firstChild.data;
+  // ipoDocDatas.price           =td[3].firstChild.data;
+  // ipoDocDatas.wantedTotal     =td[4].firstChild.data;
+  // ipoDocDatas.openDate        =td[5].firstChild.data;
+  // ipoDocDatas.refundedDate    =td[6].firstChild.data;
+  // ipoDocDatas.competitionRate =td[7].firstChild.data;
+  // ipoDocDatas.stockCoName     =td[8].firstChild.data;
+
+
+  //회사명,공모일,상장일,환불일,경쟁률,주간사,상세보기
+  var googleipoEvent = new Object;
+
+  googleipoEvent.colorId = 5;
 
   //예) 제목 : '신범주식회사 공모일'
-  ipoData.getSummary = compnayName + " 공모일";
+  googleipoEvent.getSummary = ipoDocData.company + " 공모일";
 
   //공모 시작날짜
-  ipoData.getStartTime = getStartIpoDate(ipoDate);
+  googleipoEvent.getStartTime = getStartIpoDate(ipoDate);
   //공모 마감날짜
-  ipoData.getEndTime = getEndIpoDate(ipoDate);
+  googleipoEvent.getEndTime = getEndIpoDate(ipoDate);
   //환불일
-  ipoData.getRefundedDate = getRefundedDate(refundedDate);
+  googleipoEvent.getRefundedDate = getRefundedDate(refundedDate);
   //상장일
-  ipoData.getOpenDate = getOpenDate(openDate);
+  googleipoEvent.getOpenDate = getOpenDate(openDate);
 
   //상세설명
-  ipoData.getDescription =
+  googleipoEvent.getDescription =
     "희망공모 : " + wantedPrice + "\n" +
     "공모가   : " + price + "\n" +
     "공모규모 : " + wantedTotal + "\n" +
@@ -166,7 +166,38 @@ function ipoDataTransfer(compnayName, ipoDate, refundedDate, openDate, wantedPri
   "상세링크 : " + "https://www.naver.com";
 
   //환불일,상장일은 하루종일
-  return ipoData;
+  return googleipoEvent;
+}
+
+function getDocumentIpoDatas(){
+  //var str = document.getElementById("ipoData").childNodes[3].childNodes[1].childNodes[0].nodeValue;
+  var rows = document.getElementById("ipoData").getElementsByTagName("tr");
+  // tr 만큼 루프돌면서 컬람값 접근
+  var i;
+  // 배열 객체생성
+  var ipoDocDatas = new Array();
+  
+  for(i=0; i < rows.length; i++){
+    var td = rows[i].getElementsByTagName("td");
+    
+    // 회사명	공모일	희망공모가	공모가	공모금액	상장일	환불일	경쟁률	주간사
+    var ipoData = new Object;
+    if (!(td[1].firstChild.data === "공모철회")){ 
+      
+      ipoDocDatas.company         =td[0].firstChild.data;
+      ipoDocDatas.date            =td[1].firstChild.data;
+      ipoDocDatas.wantedPrice     =td[2].firstChild.data;
+      ipoDocDatas.price           =td[3].firstChild.data;
+      ipoDocDatas.wantedTotal     =td[4].firstChild.data;
+      ipoDocDatas.openDate        =td[5].firstChild.data;
+      ipoDocDatas.refundedDate    =td[6].firstChild.data;
+      ipoDocDatas.competitionRate =td[7].firstChild.data;
+      ipoDocDatas.stockCoName     =td[8].firstChild.data;
+    
+    ipoDatas.push(ipoData);
+    }
+  }
+  return ipoDocDatas;
 }
 
 /**
@@ -190,8 +221,7 @@ function parseDate(date) {
 /**
 * 기간을 파싱하여 시작일을 나누는 함수입니다.
 * 예를들어 기간이 '11.01 ~ 11.02' 인경우 앞의 시작일을 구분하여 parseDate함수를 이용해 구분한뒤
-* iso date 형식으로 반환합니다.
-* 
+* iso date 형식으로 반환합니다.* 
 */
 function getStartIpoDate(ipoDate) {
   //var period = periodParam;
@@ -372,13 +402,13 @@ function handleSignoutClick(event) {
 }
 
 
-function testColorCheck() {
+function btnInsertAllClick() { 
+  var docIpoDatas = getDocumentIpoDatas();
   var i;
-  // for (i = 0; i < 13; i++) {
-  //   console.log(i);
-  // redEventInsert();
-  // yellowEventInser();
-  // greenEventInser();
-  //}
-  ipoEventInsertExe();
+  for(i=0;i<docIpoDatas.length;i++){
+    var googleIpoEvent = ipoDataTransfer(docIpoDatas[i])
+
+
+
+  }
 }
