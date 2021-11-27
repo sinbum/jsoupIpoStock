@@ -50,9 +50,9 @@ public List<IpoData> crollDatas(String year,String month) throws IOException {
 				ipodata.setRefference		(elInfo.get(i).child(0).text());
 				ipodata.setDate				(elInfo.get(i).child(1).text());
 				ipodata.setName				(elInfo.get(i).child(2).text());
-				ipodata.setWantedTotal		(elInfo.get(i).child(3).text());
+				ipodata.setWantedPrice		(elInfo.get(i).child(3).text());
 				ipodata.setPrice			(elInfo.get(i).child(4).text());
-				ipodata.setWatedPrice		(elInfo.get(i).child(5).text());
+				ipodata.setWantedTotal		(elInfo.get(i).child(5).text());
 				ipodata.setRefundedDate		(elInfo.get(i).child(6).text());
 				ipodata.setOpenDate			(elInfo.get(i).child(7).text());
 				ipodata.setCompetitionRate	(elInfo.get(i).child(8).text());

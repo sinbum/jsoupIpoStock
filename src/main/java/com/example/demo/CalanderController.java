@@ -29,10 +29,5 @@ public class CalanderController {
 		List <IpoData> datas = service.webcroll();
 		return service.toJsondata(datas).toString();
 	}
-	
-	
-	
-	
-	
-	
+
 }

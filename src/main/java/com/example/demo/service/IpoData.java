@@ -9,7 +9,7 @@ public class IpoData {
 	String refference;
 	String date;
 	String name;
-	String watedPrice;
+	String wantedPrice;
 	String price;
 	String wantedTotal;
 	String refundedDate;
@@ -21,6 +21,37 @@ public class IpoData {
 		// TODO Auto-generated constructor stub
 	}
 	
+	@Override
+	public String toString() {
+		return "IpoData [refference=" + refference + ", date=" + date + ", name=" + name + ", wantedPrice="
+				+ wantedPrice + ", price=" + price + ", wantedTotal=" + wantedTotal + ", refundedDate=" + refundedDate
+				+ ", openDate=" + openDate + ", competitionRate=" + competitionRate + ", StockCoName=" + StockCoName
+				+ "]";
+	}
+
+	public IpoData(String refference, String date, String name, String wantedPrice, String price, String wantedTotal,
+			String refundedDate, String openDate, String competitionRate, String stockCoName) {
+		super();
+		this.refference = refference;
+		this.date = date;
+		this.name = name;
+		this.wantedPrice = wantedPrice;
+		this.price = price;
+		this.wantedTotal = wantedTotal;
+		this.refundedDate = refundedDate;
+		this.openDate = openDate;
+		this.competitionRate = competitionRate;
+		StockCoName = stockCoName;
+	}
+
+	public String getWantedPrice() {
+		return wantedPrice;
+	}
+
+	public void setWantedPrice(String wantedPrice) {
+		this.wantedPrice = wantedPrice;
+	}
+
 	public String getRefference() {
 		return refference;
 	}
@@ -39,12 +70,7 @@ public class IpoData {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getWatedPrice() {
-		return watedPrice;
-	}
-	public void setWatedPrice(String watedPrice) {
-		this.watedPrice = watedPrice;
-	}
+	
 	public String getWantedTotal() {
 		return wantedTotal;
 	}
@@ -84,28 +110,7 @@ public class IpoData {
 		this.price = price;
 	}
 
-	public IpoData(String refference, String date, String name, String watedPrice, String price, String wantedTotal,
-			String refundedDate, String openDate, String competitionRate, String stockCoName) {
-		super();
-		this.refference = refference;
-		this.date = date;
-		this.name = name;
-		this.watedPrice = watedPrice;
-		this.price = price;
-		this.wantedTotal = wantedTotal;
-		this.refundedDate = refundedDate;
-		this.openDate = openDate;
-		this.competitionRate = competitionRate;
-		StockCoName = stockCoName;
-	}
 
-	@Override
-	public String toString() {
-		return "IpoInfo [refference=" + refference + ", date=" + date + ", name=" + name + ", watedPrice=" + watedPrice
-				+ ", price=" + price + ", wantedTotal=" + wantedTotal + ", refundedDate=" + refundedDate + ", openDate="
-				+ openDate + ", competitionRate=" + competitionRate + ", StockCoName=" + StockCoName + "]";
-	}
-	
 	
 	
 	

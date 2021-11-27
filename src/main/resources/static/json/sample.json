@@ -28,7 +28,13 @@
     "iCalUID": "0lmtm6g52g77q9od6okmj2kjj0@google.com",
     "sequence": 0,
     "reminders": {
-     "useDefault": false     
+     "useDefault": false,
+     "overrides": [
+      {
+       "method": "popup",
+       "minutes": 10
+      }
+     ]
     },
     "eventType": "default"
    },

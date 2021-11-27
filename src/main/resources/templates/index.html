@@ -46,7 +46,7 @@
 			<tr th:each="ipo : ${ipoList}">
 				<td th:text="${ipo.name}"></td>
 				<td th:text="${ipo.date}"></td>
-				<td th:text="${ipo.watedPrice}"></td>
+				<td th:text="${ipo.wantedPrice}"></td>
 				<td th:text="${ipo.price}"></td>
 				<td th:text="${ipo.wantedTotal}"></td>
 				<td th:text="${ipo.OpenDate}"></td>
@@ -60,11 +60,15 @@
 	
 	<p>번외</p>
 	<pre id="content" style="white-space: pre-wrap;"></pre>	
+	
+	
 	<script type="text/javascript" th:src="@{/js/googleAPI.js}"></script>
 	<script async defer src="https://apis.google.com/js/api.js"
       onload="this.onload=function(){};handleClientLoad()"
       onreadystatechange="if (this.readyState === 'complete') this.onload()">
     </script>
+    
+   
 
 </body>
 </html>

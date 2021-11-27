@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <script>
+        
+     
+
+    </script>
+    </head>
+    <body>
+
+        <script>
+        
+        /**
+         * '.' 으로 날짜를 파싱하여 월과 일로 구분합니다.
+         * 예를 들어 '11.01' 인경우에 객체의 month는 11을 담고 day는 1을 담습니다.
+         * 이 객체를 반환합니다.
+        */
+        function parseDate (date){
+            var dateObject = new Object;   
+            var year = new Date().getFullYear();
+            dateObject.year = year;
+                //월단위 파싱        
+            dateObject.monthIndex = date.indexOf(".",0);
+            dateObject.month = (date.substring(0, dateObject.monthIndex)) - 1; 
+            //일단위 파싱
+            dateObject.dayIndex = dateObject.monthIndex + 1;
+            dateObject.day = (date.substring(dateObject.dayIndex,date.length) * 1);        
+        return dateObject;            
+        }
+
+        /**
+         * 기간을 파싱하여 시작일을 나누는 함수입니다.
+         * 예를들어 기간이 '11.01 ~ 11.02' 인경우 앞의 시작일을 구분하여 parseDate함수를 이용해 구분한뒤
+         * iso date 형식으로 반환합니다.
+         * 
+        */
+        function getStartIpoDate() {
+            var period = "11.01 ~ 11.02";
+            // 들어오는 데이터 : 11.01 ~ 11.02
+            var ipoDate = period;
+            //~까지의 길이
+            var headDateIndex = ipoDate.indexOf("~",0);
+            //~전까지 11.01를 출력함
+            var headDate = ipoDate.substring(0,headDateIndex);
+
+            // //월단위 파싱        
+            // var monthIndex = headDate.indexOf(".",0);
+            // var month = (headDate.substring(0,monthIndex)) - 1;      
+            
+            // //일단위 파싱
+            // var dayIndex = monthIndex + 1;
+            // var day = headDate.substring(dayIndex,headDate.length);
+
+            var startDate = parseDate(headDate);
+            var dateValue = new Date(startDate.year,startDate.month,startDate.day,9,00);        
+        return dateValue.toISOString();        
+        }
+
+        /**
+         * 공모 마감날짜 생성.
+         * 
+         * 기간을 파싱하여 시작일을 나누는 함수입니다.
+         * 예를들어 기간이 '11.01 ~ 11.02' 인경우 뒤의 시작일을 구분하여 parseDate함수를 이용해 구분한뒤
+         * iso date 형식으로 반환합니다.
+        */
+        function getEndIpoDate() {
+            var period = "11.01 ~ 11.02";
+
+            var ipoDate = period;        
+            // '~' 뒤에까지의 인덱스번호
+            var tailDateStartIndex = (ipoDate.indexOf("~",0))+1;        
+            //11.02
+            var tailDate = ipoDate.substring(tailDateStartIndex,ipoDate.length);
+            var endDate = parseDate(tailDate);
+            var dateValue = new Date(endDate.year,endDate.month,endDate.day,9,00);        
+            return dateValue.toISOString();        
+            }
+
+        /**
+         * 환불일을 iso date 형식으로 반환합니다
+        */
+        function getRefundedDate() {
+            var refundedDate = '11.04'
+            var date = parseDate(refundedDate);
+            var dateValue = new Date(date.year,date.month,date.day,9,00);        
+        return dateValue.toISOString();      
+        }
+
+        /**
+         * 상장일을 iso date 형식으로 반환합니다.
+        */
+
+        //상장일        
+        function getOpenDate() {
+            var openDate = refundedDate = '11.05';
+            var date = parseDate(openDate);
+            var dateValue = new Date(date.year,date.month,date.day,9,00);        
+        return dateValue.toISOString(); 
+        }
+    </script>
+        데이터
+
+        <button onclick="getStartIpoDate()">getStartIpoDate</button>
+        <button onclick="getEndIpoDate()">tailDateStartIndex</button>
+
+    </body>
+</html>

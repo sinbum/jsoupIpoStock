@@ -36,5 +36,11 @@ public class CalendarMainController {
 		model.addAttribute("ipoList", ipoList);
 	return "index";
 	}
+	
+	@RequestMapping(value="/test")
+	public String test() throws Exception {
+	
+	return "test";
+	}
 
 }

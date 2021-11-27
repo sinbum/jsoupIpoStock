@@ -10,62 +10,30 @@ var SCOPES = "https://www.googleapis.com/auth/calendar";
 var authorizeButton = document.getElementById('authorize_button');
 var signoutButton = document.getElementById('signout_button');
 
-
-
-/**
- * 데이터 삽입에 대한 요청 객체
- */
-
-function insertRequestObjectCreate(colorId) {
-  var insertRequestObject =
-  {
-    "calendarId": "primary",
-    //"resource": calendarEvent  //eventJson
-    "resource": createJsonEvent(colorId)
-  }
-  return insertRequestObject;
-}
-
+// let colorIdA = 5;
+// let startTimeA = new Date().toISOString;
+// let endTimeA = "2021-11-28T10:00:00+09:00";
+// let descriptionA = "설명";
+// let summaryA = "제목쓰기";
 
 // 함수 선언부 ------------------------------------------------------------------------------------------
-
-//슬립.
-function sleep(ms) {
-  const wakeUpTime = Date.now() + ms;
-  while (Date.now() < wakeUpTime) {}
-}
-
-/*
- * 
- * @returns 일정 등록을 하고 성공시 성공알림을 반환
- * 
- */
-function EventInsertexecute(colorId) {
-  return gapi.client.calendar.events.insert(insertRequestObjectCreate(colorId))
-    .then(function (response) {
-      appendPre(colorId+"등록 성공")
-    },
-      function (err) { console.error("Execute error", err);appendPre(colorId+"등록 실패 : 이벤트 등록중 문제가 발생하였습니다. 관리자에게 문의하세요.");});
-}
-
-
-
 /**
  * 캘린더 이벤트객체 생성
+ * 빨강 11,노랑 5, 초록 10
  */
-function createJsonEvent(colorId) {
+function createJsonEvent(colorId, startTime, endTime, summary, description) {
   var ceo = new Object();
   var endO = new Object();
   var startO = new Object;
   //"dateTime": "2021-11-29T10:00:00+09:00",
   //"timeZone": "Asia/Seoul"
-  startO.dateTime = "2021-11-29T18:00:00+09:00";
+  startO.dateTime = startTime;
   startO.timeZone = "Asia/Seoul";
-  endO.dateTime = "2021-11-29T20:00:00+09:00";
+  endO.dateTime = endTime;
   endO.timeZone = "Asia/Seoul";
 
-  ceo.summary = colorId;
-  ceo.description = "이제 핸드폰에 모든 ipo 정보가 다담긴다!!!";
+  ceo.summary = summary;
+  ceo.description = description;
   ceo.end = endO;
   ceo.start = startO;
 
@@ -77,18 +45,216 @@ function createJsonEvent(colorId) {
   return eventJson;
 }
 
-function testColorCheck() {
-  alert("ee");
-  var i;
-  var colorId = i;
-  for (i = 0; i < 13; i++) {
-    console.log(i);
-    EventInsertexecute(i).then(function (){
-      sleep(300);
-    });
-    
+/**
+ * 데이터 삽입에 대한 요청 객체
+ */
+
+function insertRequestObjectCreate(colorId, startTime, endTime, summary, description) {
+  var insertRequestObject =
+  {
+    "calendarId": "primary",
+    //"resource": calendarEvent  //eventJson
+    "resource": createJsonEvent(colorId, startTime, endTime, summary, description)
   }
+  return insertRequestObject;
 }
+
+/*
+ * 
+ * @returns 일정 등록을 하고 성공시 성공알림을 반환
+ * 
+ */
+function EventInsertexecute(colorId, startTime, endTime, summary, description) {
+  return gapi.client.calendar.events.insert(insertRequestObjectCreate(colorId, startTime, endTime, summary, description))
+    .then(function (response) {
+      appendPre(colorId + startTime + endTime + summary + description + "등록 성공")
+    },
+      function (err) { console.error("Execute error", err); appendPre(colorId + "등록 실패 : 이벤트 등록중 문제가 발생하였습니다. 관리자에게 문의하세요."); });
+}
+
+/**
+ * 공모일 이벤트 등록 함수
+ */
+function redEventInsert() {
+  var colorId = 11;
+  var startTime = "2021-12-01T10:00:00+09:00";
+  var endTime = "2021-12-01T12:00:00+09:00";
+  var description = "설명";
+  var summary = "제목쓰기";
+  EventInsertexecute(colorId, startTime, endTime, description, summary);
+}
+
+/**
+ * 환불일 이벤트 등록 함수
+ */
+function yellowEventInser() {
+  var colorId = 5;
+  var startTime = "2021-12-01T10:00:00+09:00";
+  var endTime = "2021-12-01T12:00:00+09:00";
+  var description = "설명";
+  var summary = "제목쓰기";
+  EventInsertexecute(colorId, startTime, endTime, description, summary);
+}
+
+
+/**
+ * 상장일 이벤트 등록 함수
+ */
+function greenEventInser() {
+  var colorId = 10;
+  var startTime = "2021-12-01T10:00:00+09:00";
+  var endTime = "2021-12-01T12:00:00+09:00";
+  var description = "설명";
+  var summary = "제목쓰기";
+  EventInsertexecute(colorId, startTime, endTime, description, summary);
+}
+
+/**  
+ * 공모데이터를 한번에 등록함. parameter값 수정 필요.
+ */
+function ipoEventInsertExe(event) {
+  redEventInsert();
+  yellowEventInser();
+  greenEventInser();
+}
+
+
+/**
+ * ipo 데이터를 제이슨 형태의 구글 이벤트 양시긍로 변환.
+ * 
+ * 
+ * 
+        <td th:text="${ipo.date}"></td>
+        <td th:text="${ipo.wantedPrice}"></td>
+        <td th:text="${ipo.price}"></td>
+        <td th:text="${ipo.wantedTotal}"></td>
+        <td th:text="${ipo.OpenDate}"></td>
+        <td th:text="${ipo.refundedDate}"></td>
+        <td th:text="${ipo.competitionRate}"></td>
+        <td th:text="${ipo.StockCoName}"></td>
+
+ */
+function ipoDataTransfer(compnayName, ipoDate, refundedDate, openDate, wantedPrice, price, wantedTotal, competitionRate, stockCoName, deTailLink) {
+  //회사명,공모일,상장일,환불일,경쟁률,주간사,상세보기
+  var ipoData = new Object;
+
+  var colorId = 5;
+  var startTime = "2021-12-01T10:00:00+09:00";
+  var endTime = "2021-12-01T12:00:00+09:00";
+  var description = "설명";
+  var summary = "제목쓰기";
+
+  //예) 제목 : '신범주식회사 공모일'
+  ipoData.getSummary = compnayName + " 공모일";
+
+  //공모 시작날짜
+  ipoData.getStartTime = getStartIpoDate(ipoDate);
+  //공모 마감날짜
+  ipoData.getEndTime = getEndIpoDate(ipoDate);
+  //환불일
+  ipoData.getRefundedDate = getRefundedDate(refundedDate);
+  //상장일
+  ipoData.getOpenDate = getOpenDate(openDate);
+
+  //상세설명
+  ipoData.getDescription =
+    "희망공모 : " + wantedPrice + "\n" +
+    "공모가   : " + price + "\n" +
+    "공모규모 : " + wantedTotal + "\n" +
+    "경쟁률   : " + competitionRate + "\n" +
+    "주간사   : " + stockCoName + "\n"
+  "상세링크 : " + "https://www.naver.com";
+
+  //환불일,상장일은 하루종일
+  return ipoData;
+}
+
+/**
+ * '.' 으로 날짜를 파싱하여 월과 일로 구분합니다.
+ * 예를 들어 '11.01' 인경우에 객체의 month는 11을 담고 day는 1을 담습니다.
+ * 이 객체를 반환합니다.
+*/
+function parseDate(date) {
+  var dateObject = new Object;
+  var year = new Date().getFullYear();
+  dateObject.year = year;
+  //월단위 파싱        
+  dateObject.monthIndex = date.indexOf(".", 0);
+  dateObject.month = (date.substring(0, dateObject.monthIndex)) - 1;
+  //일단위 파싱
+  dateObject.dayIndex = dateObject.monthIndex + 1;
+  dateObject.day = (date.substring(dateObject.dayIndex, date.length) * 1);
+  return dateObject;
+}
+
+/**
+* 기간을 파싱하여 시작일을 나누는 함수입니다.
+* 예를들어 기간이 '11.01 ~ 11.02' 인경우 앞의 시작일을 구분하여 parseDate함수를 이용해 구분한뒤
+* iso date 형식으로 반환합니다.
+* 
+*/
+function getStartIpoDate(ipoDate) {
+  //var period = periodParam;
+  // 들어오는 데이터 : 11.01 ~ 11.02
+ // var ipoDate = period;
+  //~까지의 길이
+  var headDateIndex = ipoDate.indexOf("~", 0);
+  //~전까지 11.01를 출력함
+  var headDate = ipoDate.substring(0, headDateIndex);
+
+  // //월단위 파싱        
+  // var monthIndex = headDate.indexOf(".",0);
+  // var month = (headDate.substring(0,monthIndex)) - 1;      
+
+  // //일단위 파싱
+  // var dayIndex = monthIndex + 1;
+  // var day = headDate.substring(dayIndex,headDate.length);
+
+  var startDate = parseDate(headDate);
+  var dateValue = new Date(startDate.year, startDate.month, startDate.day, 9, 00);
+  return dateValue.toISOString();
+}
+
+/**
+* 공모 마감날짜 생성.
+* 
+* 기간을 파싱하여 시작일을 나누는 함수입니다.
+* 예를들어 기간이 '11.01 ~ 11.02' 인경우 뒤의 시작일을 구분하여 parseDate함수를 이용해 구분한뒤
+* iso date 형식으로 반환합니다.
+*/
+function getEndIpoDate(ipoDate) {
+  //var period = periodParam;
+
+  //var ipoDate = period;
+  // '~' 뒤에까지의 인덱스번호
+  var tailDateStartIndex = (ipoDate.indexOf("~", 0)) + 1;
+  //11.02
+  var tailDate = ipoDate.substring(tailDateStartIndex, ipoDate.length);
+  var endDate = parseDate(tailDate);
+  var dateValue = new Date(endDate.year, endDate.month, endDate.day, 9, 00);
+  return dateValue.toISOString();
+}
+
+/**
+* 환불일을 iso date 형식으로 반환합니다
+*/
+function getRefundedDate(refundedDate) { 
+  var date = parseDate(refundedDate);
+  var dateValue = new Date(date.year, date.month, date.day, 9, 00);
+  return dateValue.toISOString();
+}
+
+/**
+* 상장일을 iso date 형식으로 반환합니다.
+*/     
+function getOpenDate(openDate) { 
+  var date = parseDate(openDate);
+  var dateValue = new Date(date.year, date.month, date.day, 9, 00);
+  return dateValue.toISOString();
+}
+
+
+
 
 /**
  *  On load, called to load the auth2 library and API client library.
@@ -206,7 +372,13 @@ function handleSignoutClick(event) {
 }
 
 
-
-
-
-
+function testColorCheck() {
+  var i;
+  // for (i = 0; i < 13; i++) {
+  //   console.log(i);
+  // redEventInsert();
+  // yellowEventInser();
+  // greenEventInser();
+  //}
+  ipoEventInsertExe();
+}
