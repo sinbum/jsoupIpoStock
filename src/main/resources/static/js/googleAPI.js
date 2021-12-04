@@ -22,36 +22,47 @@ function createJsonEvent(ipoData) {
   var startO = new Object();
   var originalStartTime = new Object();
 
-  
+  ceo.summary = ipoData.summary;
+  ceo.description = ipoData.description;
+
+
+
+  ceo.colorId = ipoData.colorId;
+
   //색상 공모일 : 11,환불일 : 5, 상장일 : 10
-  if(ipoData.colorId == 11){
-    
+  if (ipoData.colorId == 11) {
+
+    ceo.summary = ceo.summary + "공모일"
+
     startO.dateTime = ipoData.startTime;
     startO.timeZone = "Asia/Seoul";
     endO.dateTime = ipoData.endTime;
     endO.timeZone = "Asia/Seoul";
-    
+
     ceo.end = endO;
     ceo.start = startO;
-    
-  }else if(ipoData.colorId == 5){
+
+  } else if (ipoData.colorId == 5) {
+
+    ceo.summary = ceo.summary + "환불일"
 
     startO.dateTime = ipoData.refundedDate;
     startO.timeZone = "Asia/Seoul";
     endO.dateTime = ipoData.refundedDate;
     endO.timeZone = "Asia/Seoul";
-    
+
     ceo.end = endO;
     ceo.start = startO;
 
-  }else if(ipoData.colorId == 10){
-    
-    
+  } else if (ipoData.colorId == 10) {
+
+    ceo.summary = ceo.summary + "상장일"
+
     startO.dateTime = ipoData.openDate;
     startO.timeZone = "Asia/Seoul";
     endO.dateTime = ipoData.openDate;
     endO.timeZone = "Asia/Seoul";
-    
+
     ceo.end = endO;
     ceo.start = startO;
 
@@ -60,8 +71,8 @@ function createJsonEvent(ipoData) {
 
 
     //originalStartTime.date = ipoData.openDate;
-    
-    if(originalStartTime.date == ""){
+
+    if (originalStartTime.date == "") {
       return null;
     }
 
@@ -70,10 +81,7 @@ function createJsonEvent(ipoData) {
     //ceo.originalStartTime = originalStartTime;
   }
 
-  ceo.summary = ipoData.summary;
-  ceo.description = ipoData.description;
-  
-  ceo.colorId = ipoData.colorId;
+
 
   var eventJson = JSON.stringify(ceo);
 
@@ -87,24 +95,24 @@ function createJsonEvent(ipoData) {
 /**
  * 공모일 이벤트 등록 함수
  */
-function eventInsert(eventType,ipoData) {
+function eventInsert(eventType, ipoData) {
   //공모일 등록 이벤트
-  if (eventType == 1){
-    ipoData.colorId = 11; 
+  if (eventType == 1) {
+    ipoData.colorId = 11;
     //return(insertRequestObjectCreate(ipoData));
     EventInsertexecute(ipoData);
-  } 
+  }
   //환불일 등록 이벤트
-  else if(eventType == 2){
-    ipoData.colorId = 5; 
+  else if (eventType == 2) {
+    ipoData.colorId = 5;
     //return(insertRequestObjectCreate(ipoData));
 
     EventInsertexecute(ipoData);
-  } 
+  }
   //상장일 등록 이벤트
-  else if (eventType == 3){
+  else if (eventType == 3) {
     ipoData.colorId = 10;
-   // return(insertRequestObjectCreate(ipoData));
+    // return(insertRequestObjectCreate(ipoData));
     EventInsertexecute(ipoData);
   }
 }
@@ -119,19 +127,19 @@ function eventInsert(eventType,ipoData) {
 function EventInsertexecute(ipoData) {
   return gapi.client.calendar.events.insert(insertRequestObjectCreate(ipoData))
     .then(function (response) {
-      appendPre(colorId + startTime + endTime + summary + description + "등록 성공")
+      appendPre(ipoData + "등록 성공")
     },
-      function (err) { console.error("Execute error", err); appendPre(colorId + "등록 실패 : 이벤트 등록중 문제가 발생하였습니다. 관리자에게 문의하세요."); });
+      function (err) { console.error("Execute error", err); appendPre(ipoData + "등록 실패 : 이벤트 등록중 문제가 발생하였습니다. 관리자에게 문의하세요." +"(상장일 미등록 확인)"); });
 }
 
 /**
  * 데이터 삽입에 대한 요청 객체
  */
 
- function insertRequestObjectCreate(ipoData) {
+function insertRequestObjectCreate(ipoData) {
   var insertRequestObject =
   {
-    "calendarId": "c4b9v3dm6vvu1ge909oiuv7hs0@group.calendar.google.com",
+    "calendarId": "primary",
     //"resource": calendarEvent  //eventJson
     "resource": createJsonEvent(ipoData)
   }
@@ -143,47 +151,47 @@ function EventInsertexecute(ipoData) {
  * 공모데이터를 한번에 등록함. parameter값 수정 필요.
  */
 function ipoEventInsertExe(event) {
-  
+
   redEventInsert();
   yellowEventInser();
   greenEventInser();
 }
 
-function getDocumentIpoDatas(){
+function getDocumentIpoDatas() {
   //var str = document.getElementById("ipoData").childNodes[3].childNodes[1].childNodes[0].nodeValue;
   var rows = document.getElementById("ipoData").getElementsByTagName("tr");
   // tr 만큼 루프돌면서 컬람값 접근
   var i;
   // 배열 객체생성
   var ipoDocDatas = new Array();
-  
-  for(i=0; i < rows.length; i++){
+
+  for (i = 0; i < rows.length; i++) {
     var td = rows[i].getElementsByTagName("td");
-    
+
     // 회사명	공모일	희망공모가	공모가	공모금액	상장일	환불일	경쟁률	주간사
     var ipoData = new Object;
-    for(var f = 0; f<9;f++){
-      if(td[f].firstChild == null){
+    for (var f = 0; f < 9; f++) {
+      if (td[f].firstChild == null) {
         //null값인 경우 빈값을 추가
         td[f].append("");
       }
       //console.log("td[f].firstChild : "+f+"번 : "+td[f].firstChild.data);
-      
+
     }
-    
-    if (!(td[1].firstChild.data === "공모철회")){ 
-      
-      ipoData.company         =td[0].firstChild.data;
-      ipoData.date            =td[1].firstChild.data;
-      ipoData.wantedPrice     =td[2].firstChild.data;
-      ipoData.price           =td[3].firstChild.data;
-      ipoData.wantedTotal     =td[4].firstChild.data;
-      ipoData.openDate        =td[5].firstChild.data;
-                                                                //console.log("getDocumentIpoDatas() 에서의 : " + ipoData.openDate);
-      ipoData.refundedDate    =td[6].firstChild.data;
-      ipoData.competitionRate =td[7].firstChild.data;
-      ipoData.stockCoName     =td[8].firstChild.data;
-    
+
+    if (!(td[1].firstChild.data === "공모철회")) {
+
+      ipoData.company = td[0].firstChild.data;
+      ipoData.date = td[1].firstChild.data;
+      ipoData.wantedPrice = td[2].firstChild.data;
+      ipoData.price = td[3].firstChild.data;
+      ipoData.wantedTotal = td[4].firstChild.data;
+      ipoData.openDate = td[5].firstChild.data;
+      //console.log("getDocumentIpoDatas() 에서의 : " + ipoData.openDate);
+      ipoData.refundedDate = td[6].firstChild.data;
+      ipoData.competitionRate = td[7].firstChild.data;
+      ipoData.stockCoName = td[8].firstChild.data;
+
       ipoDocDatas.push(ipoData);
     }
   }
@@ -201,7 +209,7 @@ function ipoDataTransfer(ipoDocData) {
   ipoData.colorId = 5;
 
   //예) 제목 : '신범주식회사 공모일'
-  ipoData.summary = ipoDocData.company + " 공모일";
+  ipoData.summary = ipoDocData.company;
 
   //공모 시작날짜
   ipoData.startTime = getStartIpoDate(ipoDocData.date);
@@ -213,7 +221,7 @@ function ipoDataTransfer(ipoDocData) {
 
   ipoData.openDate = getOpenDate(ipoDocData.openDate);
 
-  if (ipoDocData.openDate === ""){
+  if (ipoDocData.openDate === "") {
     ipoData.openDate = "";
   }
 
@@ -257,7 +265,7 @@ function parseDate(date) {
 function getStartIpoDate(ipoDate) {
   //var period = periodParam;
   // 들어오는 데이터 : 11.01 ~ 11.02
- // var ipoDate = period;
+  // var ipoDate = period;
   //~까지의 길이
   var headDateIndex = ipoDate.indexOf("~", 0);
   //~전까지 11.01를 출력함
@@ -273,7 +281,7 @@ function getStartIpoDate(ipoDate) {
 
   var startDate = parseDate(headDate);
   var dateValue = new Date(startDate.year, startDate.month, startDate.day);
-  dateValue.setHours(18,0,0);
+  dateValue.setHours(18, 0, 0);
   return dateValue.toISOString();
 }
 
@@ -294,27 +302,27 @@ function getEndIpoDate(ipoDate) {
   var tailDate = ipoDate.substring(tailDateStartIndex, ipoDate.length);
   var endDate = parseDate(tailDate);
   var dateValue = new Date(endDate.year, endDate.month, endDate.day);
-  dateValue.setHours(1,0,0);
+  dateValue.setHours(1, 0, 0);
   return dateValue.toISOString();
 }
 
 /**
 * 환불일을 iso date 형식으로 반환합니다
 */
-function getRefundedDate(refundedDate) { 
+function getRefundedDate(refundedDate) {
   var date = parseDate(refundedDate);
   var dateValue = new Date(date.year, date.month, date.day);
-  dateValue.setHours(18,0,0);
+  dateValue.setHours(18, 0, 0);
   return dateValue.toISOString();
 }
 
 /**
 * 상장일을 iso date 형식으로 반환합니다.
-*/     
+*/
 function getOpenDate(openDate) {
   var date = parseDate(openDate);
   var dateValue = new Date(date.year, date.month, date.day);
-  dateValue.setHours(18,0,0);
+  dateValue.setHours(18, 0, 0);
   return dateValue.toISOString();
 }
 
@@ -437,20 +445,20 @@ function handleSignoutClick(event) {
 }
 
 
-function btnInsertAllClick() { 
+function btnInsertAllClick() {
   var docIpoDatas = getDocumentIpoDatas();
   var i;
-  for(i=0;i<docIpoDatas.length;i++){
+  for (i = 0; i < docIpoDatas.length; i++) {
     var docIpoData = ipoDataTransfer(docIpoDatas[i]);
     // console.log(eventInsert(1,docIpoData));
     // console.log(eventInsert(2,docIpoData));
     //console.log(eventInsert(3,docIpoData));
-    
 
 
-    eventInsert(1,docIpoData)
-    eventInsert(2,docIpoData)
-    eventInsert(3,docIpoData);
+
+    eventInsert(1, docIpoData);
+    eventInsert(2, docIpoData);
+    eventInsert(3, docIpoData);
 
   }
 }
