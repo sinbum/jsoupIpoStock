@@ -11,7 +11,7 @@
 
 1.5 function ipoDataTransfer(ipoDocData) 에서 api로 보내기위한 ipoDocDatas() 의 인자값 설정중.....
 
-
+1.6insert,update,delete,get 으로 js파일 나누기
 
 
 
